@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Arcana Codex</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&family=IM+Fell+English&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:#050505;
+  font-family:'IM Fell English', serif;
+  overflow:hidden;
+}
+
+/* เอฟเฟกต์หมอกเคลื่อนไหว (ชัดขึ้น) */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background:url("https://www.transparenttextures.com/patterns/clouds.png");
+  opacity:0.25;
+  animation: drift 80s linear infinite;
+}
+
+@keyframes drift{
+  from{transform:translate(0,0);}
+  to{transform:translate(-30%, -30%);}
+}
+
+/* แสงเรืองเบื้องหลัง */
+body::after{
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle at center, rgba(255,210,120,0.15), transparent 70%);
+  pointer-events:none;
+}
+
+.container{
+  position:relative;
+  width:360px;
+  margin:80px auto;
+  padding:35px;
+  background:#efe5cf;
+  border:6px double #6e5427;
+  box-shadow:0 0 60px rgba(0,0,0,0.8);
+  text-align:center;
+}
+
+h1{
+  font-family:'Cinzel', serif;
+  letter-spacing:2px;
+  color:#3a2c14;
+}
+
+.row{
+  margin:14px 0;
+}
+
+input{
+  width:60px;
+  padding:8px;
+  border:1px solid #6e5427;
+  background:#fffdf6;
+  text-align:center;
+  font-size:18px;
+}
+
+.correct{ color:#1f7a1f; margin-left:6px;}
+.wrong{ color:#a32020; margin-left:6px;}
+
+#final{
+  margin-top:20px;
+  font-size:19px;
+  display:none;
+  line-height:1.6;
+}
+
+#letterBox{
+  display:none;
+  margin-top:18px;
+}
+
+#letterInput{
+  width:140px;
+  font-size:18px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+
+.glow{
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 6px rgba(255,215,120,0.3);}
+  to{ text-shadow:0 0 22px rgba(255,215,120,0.9);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>ARCANA CODEX</h1>
+  <p>บันทึกตัวเลขจากไพ่โบราณ</p>
+
+  <div class="row">I <input id="a1" oninput="check(1)"> <span id="c1"></span></div>
+  <div class="row">II <input id="a2" oninput="check(2)"> <span id="c2"></span></div>
+  <div class="row">III <input id="a3" oninput="check(3)"> <span id="c3"></span></div>
+  <div class="row">IV <input id="a4" oninput="check(4)"> <span id="c4"></span></div>
+
+  <div id="final">
+    ตัวเลขคือกุญแจ<br>
+    จงเรียงมันตามลำดับตัวอักษร<br>
+    แล้วเสียงของมันจะเผยความจริง
+  </div>
+
+  <div id="letterBox">
+    <p>จงบันทึกอักษรที่ค้นพบ</p>
+    <input id="letterInput" maxlength="4">
+    <div id="letterResult"></div>
+  </div>
+
+</div>
+
+<script>
+const answers = {1:"18",2:"3",3:"19",4:"2"};
+
+function check(n){
+  const input = document.getElementById("a"+n).value.trim();
+  const mark = document.getElementById("c"+n);
+
+  if(input === answers[n]){
+    mark.innerHTML = "✓";
+    mark.className="correct";
+  } else if(input===""){
+    mark.innerHTML="";
+  } else {
+    mark.innerHTML="✗";
+    mark.className="wrong";
+  }
+
+  checkFinal();
+}
+
+function checkFinal(){
+  if(
+    a1.value==="18" &&
+    a2.value==="3" &&
+    a3.value==="19" &&
+    a4.value==="2"
+  ){
+    final.style.display="block";
+    final.classList.add("glow");
+    letterBox.style.display="block";
+  }
+}
+
+/* ตรวจคำตอบตัวอักษร */
+letterInput.addEventListener("input", function(){
+  const val = this.value.toUpperCase();
+  if(val === "RCSB"){
+    letterResult.innerHTML = "✨ ผนึกขั้นสุดท้ายถูกเปิด ✨";
+    letterResult.className="glow";
+  } else {
+    letterResult.innerHTML = "";
+  }
+});
+</script>
+
+</body>
+</html>
